@@ -4,7 +4,14 @@ $(document).ready(function() {
     header: {
       left: 'prev,next today',
       center: 'title',
-      right: 'month,agendaWeek,agendaDay'
+      right: 'month,agendaWeek,agendaFourDay,agendaDay'
+    },
+    views: {
+      agendaFourDay: {
+        type: 'agenda',
+        duration: {days: 4},
+        buttonText: '4 days'
+      }
     },
     defaultView: 'month',
     defaultDate: new Date(),
