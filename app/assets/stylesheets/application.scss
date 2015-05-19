@@ -11,11 +11,12 @@
  * file per style scope.
  *
  *= require_self
- *= require bootstrap-datetimepicker
+
  *= require select2
  *= require select2-bootstrap
  *= require custom
  *= require fullcalendar
+ *= require jquery.datetimepicker
  */
 
 @import "bootstrap-sprockets";
