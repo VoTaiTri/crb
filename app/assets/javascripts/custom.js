@@ -98,14 +98,28 @@ $(document).ready(function() {
         }
       });
     },
-    selectOverlap: function(event) {
-        return event.rendering == 'background';
-    },
     select: function (start, end, jsEvent, view) {
       if((view.type != 'month') && (start._d >= (new Date()))) {
         $("#modal-form").modal('show');
-        $('#start-time').datetimepicker('setDate', start._d);
-        $('#finish-time').datetimepicker('setDate', end._d);
+        var start_event = new Date(start._d.setTime(start._d.getTime() + (start._d.getTimezoneOffset() * 60000)));
+        var finish_event = new Date(end._d.setTime(end._d.getTime() + (end._d.getTimezoneOffset() * 60000)));
+        $("#schedule_start_time").kendoDateTimePicker({
+          value: start_event,
+          min: new Date(),
+          change: startChange,
+          parseFormats: ["MM/dd/yyyy"],
+          format: "yyyy-MM-dd HH:mm",
+          timeFormat: "HH:mm",
+          open: function() { $('.k-weekend a').bind('click', function() { return false; }); },
+        }).data("kendoDateTimePicker");
+        $("#schedule_finish_time").kendoDateTimePicker({
+          value: finish_event,
+          change: endChange,
+          parseFormats: ["MM/dd/yyyy"],
+          format: "yyyy-MM-dd HH:mm",
+          timeFormat: "HH:mm",
+          open: function() { $('.k-weekend a').bind('click', function() { return false; }); },
+        }).data("kendoDateTimePicker");
       }
       else {
         $('#calendar').fullCalendar('unselect');
@@ -135,7 +149,7 @@ $(document).ready(function() {
           });
         };
         $('body').on('click', function (e) {
-          if (!element.is(e.target) && element.has(e.target).length === 0 && $('.popover').has(e.target).length === 0)
+          if (!element.is(e.target) && element.has(e.target).length == 0 && $('.popover').has(e.target).length == 0)
           element.popover('hide');
         });
       }           
@@ -144,7 +158,23 @@ $(document).ready(function() {
       if((view.type == 'month' && date.format() >= (new Date()).toISOString().slice(0, 10)) || date._d >= (new Date())) {
         $("#modal-form").modal('show');
         var TimeZoned = new Date(date.toDate().setTime(date.toDate().getTime() + (date.toDate().getTimezoneOffset() * 60000)));
-        $('#start-time').datetimepicker('setDate', TimeZoned);
+        $("#schedule_start_time").kendoDateTimePicker({
+          value: TimeZoned,
+          min: new Date(),
+          change: startChange,
+          parseFormats: ["MM/dd/yyyy"],
+          format: "yyyy-MM-dd HH:mm",
+          timeFormat: "HH:mm",
+          open: function() { $('.k-weekend a').bind('click', function() { return false; }); },
+        }).data("kendoDateTimePicker");
+        $("#schedule_finish_time").kendoDateTimePicker({
+          value: TimeZoned,
+          change: endChange,
+          parseFormats: ["MM/dd/yyyy"],
+          format: "yyyy-MM-dd HH:mm",
+          timeFormat: "HH:mm",
+          open: function() { $('.k-weekend a').bind('click', function() { return false; }); },
+        }).data("kendoDateTimePicker");
       }
     },
     viewRender: function(view, element) { 
@@ -162,7 +192,6 @@ $(document).ready(function() {
   });
 
   var start = $("#schedule_start_time").kendoDateTimePicker({
-    value: new Date(),
     min: new Date(),
     change: startChange,
     parseFormats: ["MM/dd/yyyy"],
